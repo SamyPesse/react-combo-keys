@@ -34,7 +34,7 @@ const SearchBar = React.createClass({
                 <input type="text" ref="input" />
 
                 <ComboKey
-                    key="Mod+,"
+                    combo="Mod+,"
                     onTrigger={e => alert('Settings !')}
                     />
             </ComboKeys>

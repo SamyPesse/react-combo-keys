@@ -9,8 +9,7 @@ const ComboKeys = React.createClass({
         children: React.PropTypes.node,
         keyMap: React.PropTypes.objectOf(
             React.PropTypes.func
-        ).isRequired,
-        handler: React.PropTypes.func.isRequired
+        ).isRequired
     },
 
     componentDidMount() {
@@ -32,16 +31,16 @@ const ComboKeys = React.createClass({
 
     unbindKeyMap(keyMap) {
         Object.keys(keyMap)
-        .forEach((key) => {
-            Mousetrap.unbind(key);
+        .forEach((combo) => {
+            Mousetrap.unbind(combo);
         });
     },
 
     bindKeyMap(keyMap) {
         Object.keys(keyMap)
-        .forEach((key) => {
-            const onTrigger = keyMap[key];
-            Mousetrap.bind(key, onTrigger);
+        .forEach((combo) => {
+            const onTrigger = keyMap[combo];
+            Mousetrap.bind(combo, onTrigger);
         });
     },
 
@@ -57,13 +56,13 @@ const ComboKeys = React.createClass({
 const ComboKey = React.createClass({
     propTypes: {
         children: React.PropTypes.node,
-        key: React.PropTypes.string.isRequired,
+        combo: React.PropTypes.string.isRequired,
         onTrigger: React.PropTypes.func.isRequired
     },
 
     render() {
-        const { children, key, onTrigger } = this.props;
-        const keyMap = { [key]: onTrigger };
+        const { children, combo, onTrigger } = this.props;
+        const keyMap = { [combo]: onTrigger };
 
         return (
             <ComboKeys keyMap={keyMap}>
