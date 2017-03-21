@@ -1,6 +1,6 @@
 {
   "name": "react-combo-keys",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React component to bind keyboard shortcuts",
   "main": "./lib/index.js",
   "scripts": {
