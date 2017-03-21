@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "7.4.0"
+
+# Test and lint
+script:
+  - npm run lint
