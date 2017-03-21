@@ -1,5 +1,9 @@
 # `react-combo-keys`
 
+[![Build Status](https://travis-ci.org/SamyPesse/react-combo-keys.svg?branch=master)](https://travis-ci.org/SamyPesse/react-combo-keys)
+[![NPM version](https://badge.fury.io/js/react-combo-keys.svg)](http://badge.fury.io/js/react-combo-keys)
+
+
 Declarative API with React to bind keyboard shortcuts using Mousetrap.
 
 ### Installation
