@@ -30,6 +30,23 @@ function areKeyMapsEqual(a, b) {
  * Bind a keymap using mousetrap.
  */
 class ComboKeys extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.mousetrap = Mousetrap();
+
+        const _stopCallback = this.mousetrap.stopCallback;
+        this.mousetrap.stopCallback = function(e, element, combo) {
+            let result = _stopCallback(e, element, combo);
+
+            if (result) {
+                result = props.stopCallback(element);
+            }
+
+            return result;
+        };
+    }
+
     componentDidMount() {
         this.bindKeyMap(
             this.props.keyMap
@@ -54,7 +71,7 @@ class ComboKeys extends React.Component {
     unbindKeyMap(keyMap) {
         Object.keys(keyMap)
         .forEach((combo) => {
-            Mousetrap.unbind(combo);
+            this.mousetrap.unbind(combo);
         });
     }
 
@@ -62,7 +79,7 @@ class ComboKeys extends React.Component {
         Object.keys(keyMap)
         .forEach((combo) => {
             const onTrigger = keyMap[combo];
-            Mousetrap.bind(combo, onTrigger);
+            this.mousetrap.bind(combo, onTrigger);
         });
     }
 
@@ -76,7 +93,8 @@ ComboKeys.propTypes = {
     children: React.PropTypes.node,
     keyMap: React.PropTypes.objectOf(
         React.PropTypes.func
-    ).isRequired
+    ).isRequired,
+    stopCallback: React.PropTypes.func
 };
 
 /*
