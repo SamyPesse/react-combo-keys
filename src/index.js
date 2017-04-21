@@ -40,7 +40,7 @@ class ComboKeys extends React.Component {
             let result = _stopCallback(e, element, combo);
 
             if (result) {
-                result = this.props.stopAt(element);
+                result = this.props.stopAt(e, element, combo);
             }
 
             return result;
