@@ -40,7 +40,7 @@ class ComboKeys extends React.Component {
             let result = _stopCallback(e, element, combo);
 
             if (result) {
-                result = props.stopCallback(element);
+                result = this.props.stopAt(element);
             }
 
             return result;
@@ -94,7 +94,7 @@ ComboKeys.propTypes = {
     keyMap: React.PropTypes.objectOf(
         React.PropTypes.func
     ).isRequired,
-    stopCallback: React.PropTypes.func
+    stopAt: React.PropTypes.func
 };
 
 /*
