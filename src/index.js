@@ -33,6 +33,11 @@ class ComboKeys extends React.Component {
     constructor(props) {
         super(props);
 
+        // Is it server-side rendering ?
+        if (typeof Mousetrap == 'undefined') {
+            return;
+        }
+
         const self = this;
         this.mousetrap = Mousetrap();
 
