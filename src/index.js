@@ -41,16 +41,15 @@ class ComboKeys extends React.Component {
         const self = this;
         this.mousetrap = Mousetrap();
 
-        const _stopCallback = this.mousetrap.stopCallback;
-        this.mousetrap.stopCallback = (e, element, combo) => {
-            let result = _stopCallback(e, element, combo);
-
-            if (result && self.props.stopAt) {
-                result = self.props.stopAt(e, element, combo);
-            }
-
-            return result;
-        };
+        const stopAt = self.props.stopAt;
+        if (stopAt) {
+            // Plug the custom stopAt in
+            const _stopCallback = this.mousetrap.stopCallback;
+            this.mousetrap.stopCallback = (e, element, combo) => {
+                return _stopCallback(e, element, combo)
+                    && stopAt(e, element, combo);
+            };
+        }
     }
 
     componentDidMount() {
