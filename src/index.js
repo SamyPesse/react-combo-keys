@@ -45,7 +45,7 @@ class ComboKeys extends React.Component {
         this.mousetrap.stopCallback = (e, element, combo) => {
             let result = _stopCallback(e, element, combo);
 
-            if (result) {
+            if (result && self.props.stopAt) {
                 result = self.props.stopAt(e, element, combo);
             }
 
@@ -108,11 +108,11 @@ ComboKeys.propTypes = {
  */
 class ComboKey extends React.PureComponent {
     render() {
-        const { children, combo, onTrigger } = this.props;
+        const { children, combo, onTrigger, stopAt } = this.props;
         const keyMap = { [combo]: onTrigger };
 
         return (
-            <ComboKeys keyMap={keyMap}>
+            <ComboKeys keyMap={keyMap} stopAt={stopAt} >
                 {children}
             </ComboKeys>
         );
@@ -122,7 +122,8 @@ class ComboKey extends React.PureComponent {
 ComboKey.propTypes = {
     children: React.PropTypes.node,
     combo: React.PropTypes.string.isRequired,
-    onTrigger: React.PropTypes.func.isRequired
+    onTrigger: React.PropTypes.func.isRequired,
+    stopAt: React.PropTypes.func
 };
 
 export {
