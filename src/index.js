@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Mousetrap from 'mousetrap';
 
@@ -95,11 +96,11 @@ class ComboKeys extends React.Component {
 }
 
 ComboKeys.propTypes = {
-    children: React.PropTypes.node,
-    keyMap: React.PropTypes.objectOf(
-        React.PropTypes.func
+    children: PropTypes.node,
+    keyMap: PropTypes.objectOf(
+        PropTypes.func
     ).isRequired,
-    stopAt: React.PropTypes.func
+    stopAt: PropTypes.func
 };
 
 /*
@@ -119,10 +120,10 @@ class ComboKey extends React.PureComponent {
 }
 
 ComboKey.propTypes = {
-    children: React.PropTypes.node,
-    combo: React.PropTypes.string.isRequired,
-    onTrigger: React.PropTypes.func.isRequired,
-    stopAt: React.PropTypes.func
+    children: PropTypes.node,
+    combo: PropTypes.string.isRequired,
+    onTrigger: PropTypes.func.isRequired,
+    stopAt: PropTypes.func
 };
 
 export {
