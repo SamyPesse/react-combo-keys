@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Mousetrap from 'mousetrap';
 
 /*
@@ -13,7 +14,7 @@ function areKeyMapsEqual(a, b) {
         return false;
     }
 
-    for (let i = 0; i < aSize; i++) {
+    for (let i = 0; i < aSize; i += 1) {
         const aKey = aKeys[i];
         const aValue = a[aKey];
         const bValue = b[aKey];
@@ -30,6 +31,17 @@ function areKeyMapsEqual(a, b) {
  * Bind a keymap using mousetrap.
  */
 class ComboKeys extends React.Component {
+    static propTypes = {
+        children: PropTypes.node,
+        keyMap: PropTypes.objectOf(PropTypes.func).isRequired,
+        stopAt: PropTypes.func
+    };
+
+    static defaultProps = {
+        children: null,
+        stopAt: null
+    };
+
     constructor(props) {
         super(props);
 
@@ -38,24 +50,20 @@ class ComboKeys extends React.Component {
             return;
         }
 
-        const self = this;
         this.mousetrap = Mousetrap();
 
-        const stopAt = self.props.stopAt;
+        const { stopAt } = props;
         if (stopAt) {
             // Plug the custom stopAt in
-            const _stopCallback = this.mousetrap.stopCallback;
-            this.mousetrap.stopCallback = (e, element, combo) => {
-                return _stopCallback(e, element, combo)
-                    && stopAt(e, element, combo);
-            };
+            const originalStopCallback = this.mousetrap.stopCallback;
+            this.mousetrap.stopCallback = (e, element, combo) =>
+                originalStopCallback(e, element, combo) &&
+                stopAt(e, element, combo);
         }
     }
 
     componentDidMount() {
-        this.bindKeyMap(
-            this.props.keyMap
-        );
+        this.bindKeyMap(this.props.keyMap);
     }
 
     componentDidUpdate(prevProps) {
@@ -68,21 +76,17 @@ class ComboKeys extends React.Component {
     }
 
     componentWillUnmount() {
-        this.unbindKeyMap(
-            this.props.keyMap
-        );
+        this.unbindKeyMap(this.props.keyMap);
     }
 
     unbindKeyMap(keyMap) {
-        Object.keys(keyMap)
-        .forEach((combo) => {
+        Object.keys(keyMap).forEach(combo => {
             this.mousetrap.unbind(combo);
         });
     }
 
     bindKeyMap(keyMap) {
-        Object.keys(keyMap)
-        .forEach((combo) => {
+        Object.keys(keyMap).forEach(combo => {
             const onTrigger = keyMap[combo];
             this.mousetrap.bind(combo, onTrigger);
         });
@@ -94,38 +98,32 @@ class ComboKeys extends React.Component {
     }
 }
 
-ComboKeys.propTypes = {
-    children: React.PropTypes.node,
-    keyMap: React.PropTypes.objectOf(
-        React.PropTypes.func
-    ).isRequired,
-    stopAt: React.PropTypes.func
-};
-
 /*
  * Component to bind a single handler. This is a wrapper around ComboKeys.
  */
 class ComboKey extends React.PureComponent {
+    static propTypes = {
+        children: PropTypes.node,
+        combo: PropTypes.string.isRequired,
+        onTrigger: PropTypes.func.isRequired,
+        stopAt: PropTypes.func
+    };
+
+    static defaultProps = {
+        children: null,
+        stopAt: null
+    };
+
     render() {
         const { children, combo, onTrigger, stopAt } = this.props;
         const keyMap = { [combo]: onTrigger };
 
         return (
-            <ComboKeys keyMap={keyMap} stopAt={stopAt} >
+            <ComboKeys keyMap={keyMap} stopAt={stopAt}>
                 {children}
             </ComboKeys>
         );
     }
 }
 
-ComboKey.propTypes = {
-    children: React.PropTypes.node,
-    combo: React.PropTypes.string.isRequired,
-    onTrigger: React.PropTypes.func.isRequired,
-    stopAt: React.PropTypes.func
-};
-
-export {
-    ComboKey,
-    ComboKeys
-};
+export { ComboKey, ComboKeys };
