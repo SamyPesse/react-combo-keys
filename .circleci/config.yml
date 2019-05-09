@@ -1,0 +1,90 @@
+
+# Common docker image used acrossed jobs
+docker_image: &docker_image
+  - image: circleci/node:8.15.0
+
+# Cache keys for yarn cache
+yarn_cache_keys: &yarn_cache_keys
+  - yarn-cache-{{ checksum "yarn.lock" }}-
+  - yarn-cache-
+yarn_cache: &yarn_cache
+  name: Restoring yarn cache
+  keys: *yarn_cache_keys
+
+# Cache key for root node_modules
+root_dependencies_key: &root_dependencies_key modules-{{ checksum "yarn.lock" }}
+root_dependencies_cache: &root_dependencies_cache
+  name: Restoring Node dev dependencies
+  keys:
+    - *root_dependencies_key
+
+version: 2
+jobs:
+  #
+  # Install and cache dependencies before running tests, lint and benchmarks
+  #
+  install:
+    docker: *docker_image
+    steps:
+      - checkout
+      # Restore yarn cache from lockfiles if possible with fallback
+      - restore_cache: *yarn_cache
+      # Restore root node_modules from lockfile if possible
+      - restore_cache: *root_dependencies_cache
+      # Actually install all dependencies
+      - run:
+          name: Installing dependencies
+          command: yarn --frozen-lockfile
+      # Save yarn cache for future builds
+      - save_cache:
+          name: Saving yarn cache
+          key: yarn-cache-{{ checksum "yarn.lock" }}-{{ checksum "modules/yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      # Save root node_modules for future builds and next steps
+      - save_cache:
+          name: Saving Node dev dependencies
+          key: *root_dependencies_key
+          paths:
+            - ./node_modules
+  
+  #
+  # Lint the code
+  #
+  lint:
+    docker: *docker_image
+    steps:
+      - checkout
+      # Restore saved root node_modules
+      - restore_cache: *root_dependencies_cache
+      # Run lint
+      - run:
+          name: Linting code
+          command: yarn run lint
+
+  #
+  # Build the code
+  #
+  build:
+    docker: *docker_image
+    steps:
+      - checkout
+      # Restore saved root node_modules
+      - restore_cache: *root_dependencies_cache
+      # Run lint
+      - run:
+          name: Building code
+          command: yarn run build
+
+# CircleCI main workflow
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
