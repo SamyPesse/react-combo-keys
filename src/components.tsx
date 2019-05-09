@@ -6,15 +6,13 @@ import { KeyboardShortcuts, KeyboardShortcutTrigger, Options } from './types';
  * Deprecated components.
  */
 
-export function ComboKeys(
-    props: Options & {
-        keyMap: KeyboardShortcuts;
-        children: React.ReactNode;
-    }
-): React.ReactElement {
-    const { children, keyMap, ...options } = props;
+export function ComboKeys(props: {
+    keyMap: KeyboardShortcuts;
+    children: React.ReactNode;
+}): React.ReactElement {
+    const { children, keyMap } = props;
 
-    useComboKeys(keyMap, options);
+    useComboKeys(keyMap, [keyMap]);
 
     return children ? React.Children.only(children) : null;
 }
@@ -24,7 +22,7 @@ export function ComboKey(props: {
     onTrigger: KeyboardShortcutTrigger;
     children: React.ReactNode;
 }): React.ReactElement {
-    const { children, combo, onTrigger, ...options } = props;
+    const { children, combo, onTrigger } = props;
 
     const keyMap = React.useMemo(
         () => ({
@@ -33,7 +31,7 @@ export function ComboKey(props: {
         [combo, onTrigger]
     );
 
-    useComboKeys(keyMap, options);
+    useComboKeys(keyMap, [keyMap]);
 
     return children ? React.Children.only(children) : null;
 }
