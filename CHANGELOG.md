@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### 1.0.0
+
+- Expose React hook `useComboKeys`
+
 ### 0.2.5
 
 - Make prop `stopAt` optional

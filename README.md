@@ -9,36 +9,27 @@ Declarative API with React to bind keyboard shortcuts using Mousetrap.
 ### Installation
 
 ```
-$ npm install react-combo-keys --save
+$ yarn add react-combo-keys
 ```
 
 ### Usage
 
-```js
-import React from 'react';
-import { ComboKeys, ComboKey } from 'react-combo-keys';
+```ts
+import * as React from 'react';
+import { useComboKeys } from 'react-combo-keys';
 
-const SearchBar = React.createClass({
-    focus() {
-        const { input } = this.refs;
-        input.focus();
-    },
+function SearchBar(props: {}) {
+    const input = Rwact.useRef();
 
-    render() {
-        const keyMap = {
-            'Mod+F': this.focus
-        };
+    useComboKeys({
+        'Mod+F': () => {
+            input.current.focus();
+        },
+        'Mod+': () => {
+            alert('Settings !')
+        }
+    }, {}, []);
 
-        return (
-            <ComboKeys keyMap={keyMap}>
-                <input type="text" ref="input" />
-
-                <ComboKey
-                    combo="Mod+,"
-                    onTrigger={e => alert('Settings !')}
-                    />
-            </ComboKeys>
-        );
-    }
-});
+    return <input type="text" ref={input} />;
+}
 ```
