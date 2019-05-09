@@ -5,7 +5,7 @@ const IS_SSR = typeof Mousetrap !== 'function';
 
 // During SSR, the value is null
 export const MousetrapContext = React.createContext<Mousetrap | null>(
-    IS_SSR ? Mousetrap() : null
+    IS_SSR ? null : Mousetrap()
 );
 
 /*
