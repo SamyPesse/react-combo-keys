@@ -6,9 +6,7 @@ import { KeyboardShortcuts } from './types';
 /*
  * Bind keyboard shortcuts.
  */
-export function useComboKeys(
-    keyMap: KeyboardShortcuts
-): void {
+export function useComboKeys(keyMap: KeyboardShortcuts): void {
     const mousetrap = React.useContext(MousetrapContext);
     const keyMapRef = React.useRef(keyMap);
     keyMapRef.current = keyMap;
@@ -20,7 +18,7 @@ export function useComboKeys(
 
     React.useEffect(() => {
         Object.keys(keyMap).forEach(combo => {
-            mousetrap.bind(combo, (event) => {
+            mousetrap.bind(combo, event => {
                 keyMapRef.current[combo](event);
             });
         });
