@@ -12,7 +12,7 @@ export function ComboKeys(props: {
 }): React.ReactElement {
     const { children, keyMap } = props;
 
-    useComboKeys(keyMap, [keyMap]);
+    useComboKeys(keyMap);
 
     return children ? React.Children.only(children) : null;
 }
@@ -24,14 +24,9 @@ export function ComboKey(props: {
 }): React.ReactElement {
     const { children, combo, onTrigger } = props;
 
-    const keyMap = React.useMemo(
-        () => ({
-            [combo]: onTrigger
-        }),
-        [combo, onTrigger]
-    );
-
-    useComboKeys(keyMap, [keyMap]);
+    useComboKeys({
+        [combo]: onTrigger
+    });
 
     return children ? React.Children.only(children) : null;
 }
